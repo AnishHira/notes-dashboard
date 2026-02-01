@@ -1,2 +1,4 @@
 backend/notes.db
 venv/
+__pycache__/
+*.pyc
