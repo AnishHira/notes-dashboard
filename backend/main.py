@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from .db import get_connection
+import sqlite3
 from pydantic import BaseModel
 
 app = FastAPI()
@@ -19,6 +20,24 @@ def create_note(note: Note):
     conn.close()
 
     return {"message": "Note Saved"}
+
+@app.put("/notes/{note_id}")
+def update_notes(note_id: int, note: Note):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    conn.row_factory = sqlite3.Row
+
+    cursor.execute("UPDATE NOTES SET title = ?, content = ? WHERE id = ?", (note.title, note.content, note_id))
+
+    conn.commit()
+    conn.close()
+
+    return {
+        "id": note_id,
+        "title": note.title,
+        "content": note.content,
+    }
 
 @app.get("/notes")
 def get_notes():
