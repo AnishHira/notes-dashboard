@@ -26,8 +26,6 @@ def update_notes(note_id: int, note: Note):
     conn = get_connection()
     cursor = conn.cursor()
 
-    conn.row_factory = sqlite3.Row
-
     cursor.execute("UPDATE NOTES SET title = ?, content = ? WHERE id = ?", (note.title, note.content, note_id))
 
     conn.commit()
@@ -59,3 +57,13 @@ def get_notes():
         }
         for row in rows
     ]
+
+@app.delete("/notes/{note_id}")
+def delete_note(note_id: int, note: Note):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("DELETE FROM notes WHERE id = ?", (note_id,))
+
+    conn.commit()
+    conn.close()
