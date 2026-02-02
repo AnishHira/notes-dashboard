@@ -9,14 +9,22 @@ async function loadNotes() {
         const div = document.createElement("div");
         div.className = "note";
 
-        const title = document.createElement("h3");
-        title.textContent = note.title;
+        const titleInput = document.createElement("input");
+        titleInput.id = `title-${note.id}`;
+        titleInput.value = note.title;
 
-        const content = document.createElement("p");
-        content.textContent = note.content;
+        const contentInput = document.createElement("textarea");
+        contentInput.id = `content-${note.id}`;
+        contentInput.value = note.content;
 
-        div.appendChild(title);
-        div.appendChild(content);
+        const saveButton = document.createElement("button");
+        saveButton.textContent = "Save";
+        saveButton.onclick = () => updateNote(note.id);
+
+        div.appendChild(titleInput);
+        div.appendChild(contentInput);
+        div.appendChild(saveButton);
+
         container.appendChild(div);
     });
 }
@@ -33,6 +41,20 @@ async function createNote() {
 
     document.getElementById("newTitle").value = "";
     document.getElementById("newContent").value = "";
+
+    loadNotes();
+}
+
+async function updateNote(id) {
+    const title = document.getElementById(`title-${id}`).value;
+    const content = document.getElementById(`content-${id}`).value;
+
+    await fetch(`http://127.0.0.1:8000/notes/${id}`, { 
+        method: "PUT",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({title, content})
+    });
+
 
     loadNotes();
 }
