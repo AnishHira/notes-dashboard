@@ -71,7 +71,7 @@ def get_notes():
     ]
 
 @app.delete("/notes/{note_id}")
-def delete_note(note_id: int, note: Note):
+def delete_note(note_id: int):
     conn = get_connection()
     cursor = conn.cursor()
 
@@ -79,3 +79,4 @@ def delete_note(note_id: int, note: Note):
 
     conn.commit()
     conn.close()
+    return {"message": "Note deleted"}
