@@ -19,7 +19,22 @@ async function loadNotes() {
         div.appendChild(content);
         container.appendChild(div);
     });
+}
 
+async function createNote() {
+    const title = document.getElementById("newTitle").value;
+    const content = document.getElementById("newContent").value;
+
+    await fetch("http://127.0.0.1:8000/notes", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({title, content})
+    });
+
+    document.getElementById("newTitle").value = "";
+    document.getElementById("newContent").value = "";
+
+    loadNotes();
 }
 
 loadNotes();
