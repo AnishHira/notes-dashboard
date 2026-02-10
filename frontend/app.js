@@ -36,26 +36,4 @@ async function createNote() {
     loadNotes();
 }
 
-async function updateNote(id) {
-    const title = document.getElementById(`title-${id}`).value;
-    const content = document.getElementById(`content-${id}`).value;
-
-    await fetch(`${API}/notes/${id}`, { 
-        method: "PUT",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({title, content})
-    });
-
-
-    loadNotes();
-}
-
-async function deleteNote(id) {
-    await fetch(`${API}/notes/${id}`, {
-        method: "DELETE"
-    });
-
-    loadNotes();
-}
-
 loadNotes();

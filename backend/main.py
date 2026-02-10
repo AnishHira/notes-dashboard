@@ -89,3 +89,23 @@ def delete_note(note_id: int):
     conn.commit()
     conn.close()
     return {"message": "Note deleted"}
+
+@app.get("/notes/{note_id}")
+def get_note(note_id: int):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT id, title, content FROM notes WHERE id = ?",
+        (note_id,)
+    )
+    row = cursor.fetchone()
+    conn.close()
+
+    if not row:
+        return {"error": "Note not found"}
+
+    return {
+        "id": row[0],
+        "title": row[1],
+        "content": row[2]
+    }
