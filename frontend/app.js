@@ -1,4 +1,4 @@
-API = "http://127.0.0.1:8000"
+const API = "http://127.0.0.1:8000"
 
 async function loadNotes() {
     const response = await fetch(`${API}/notes`);
@@ -8,31 +8,15 @@ async function loadNotes() {
     container.innerHTML = "";
 
     notes.forEach(note => {
-        const div = document.createElement("div");
-        div.className = "note";
+        const card = document.createElement("div");
+        card.className = "note-card";
+        card.textContent = note.title || "Untitled Note";
 
-        const titleInput = document.createElement("input");
-        titleInput.id = `title-${note.id}`;
-        titleInput.value = note.title;
+        card.onclick = () => {
+            window.location.href = `note.html?id=${note.id}`;
+        }
 
-        const contentInput = document.createElement("textarea");
-        contentInput.id = `content-${note.id}`;
-        contentInput.value = note.content;
-
-        const saveButton = document.createElement("button");
-        saveButton.textContent = "Save";
-        saveButton.onclick = () => updateNote(note.id);
-
-        const deleteButton = document.createElement("button");
-        deleteButton.textContent = "Delete";
-        deleteButton.onclick = () => deleteNote(note.id);
-
-        div.appendChild(titleInput);
-        div.appendChild(contentInput);
-        div.appendChild(saveButton);
-        div.appendChild(deleteButton);
-
-        container.appendChild(div);
+        container.appendChild(card);
     });
 }
 

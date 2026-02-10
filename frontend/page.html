@@ -28,16 +28,26 @@
         .note p {
             margin: 0;
         }
+        .note-card {
+            border: 1px solid #000000;
+            padding: 14px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            background: #fafafa;
+            transition: background 0.2s ease;
+        }
+        .note-card:hover {
+            background: #f0f0f0;
+        }
+
     </style>
 
 </head>
 <body>
     <h1>Notes</h1>
 
-    <h2>New Note</h2>
-    <input id= "newTitle" placeholder= "Title">
-    <textarea id = "newContent" placeholder = "Content"></textarea>
-    <button onclick="createNote()">Create</button>
+    <button onclick="window.location.href='note.html'">Create New Note</button>
 
     <h2>All Notes</h2>
     <div id="notes"></div>

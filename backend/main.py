@@ -1,11 +1,14 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from .db import get_connection
 import sqlite3
 from pydantic import BaseModel
-from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
+
+app.mount("/static", StaticFiles(directory="frontend"), name="static")
 
 app.add_middleware(
     CORSMiddleware,
@@ -15,11 +18,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.mount("/static", StaticFiles(directory="frontend"), name="static")
-
 class Note(BaseModel):
     title: str
     content: str
+
+@app.get("/")
+def home():
+    return FileResponse("frontend/page.html")
+
+@app.get("/note.html")
+def note_page():
+    return FileResponse("frontend/note.html")
 
 @app.post("/notes")
 def create_note(note: Note):
