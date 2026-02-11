@@ -58,3 +58,4 @@ window.addEventListener("DOMContentLoaded", () => {
         document.getElementById("content").value = "";
     }
 });
+
