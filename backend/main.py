@@ -37,10 +37,11 @@ def create_note(note: Note):
 
     cursor.execute("INSERT INTO notes (title, content) VALUES (?, ?)", (note.title, note.content))
 
+    note_id = cursor.lastrowid
     conn.commit()
     conn.close()
 
-    return {"message": "Note Saved"}
+    return {"id": note_id, "message": "Note Saved"}
 
 @app.put("/notes/{note_id}")
 def update_notes(note_id: int, note: Note):

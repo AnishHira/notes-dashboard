@@ -14,19 +14,31 @@ async function loadNote() {
 
     const note = await res.json();
 
-    document.getElementById("title").value = note.title || "Unititled Note";
-    document.getElementById("content").value = note.content || "Empty Contents";
+    document.getElementById("title").value = note.title || "Untitled Note";
+    document.getElementById("content").value = note.content || "";
 }
 
 async function updateNote() {
-    const title = document.getElementById("title").value;
-    const content = document.getElementById("content").value;
+    const title = document.getElementById("title").value || "Untitled Note";
+    const content = document.getElementById("content").value || "";
 
-    await fetch(`${API}/notes/${noteId}`, { 
-        method: "PUT",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({title, content})
-    });
+    if (noteId) {
+        await fetch(`${API}/notes/${noteId}`, { 
+            method: "PUT",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({title, content})
+        });
+    } else {
+        const res = await fetch(`${API}/notes`, {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({title, content})
+        });
+
+        const data = await res.json();
+        window.location.href = `note.html?id=${data.id}`;
+        return;
+    }
 }
 
 async function deleteNote() {
@@ -40,5 +52,9 @@ async function deleteNote() {
 window.addEventListener("DOMContentLoaded", () => {
     if (noteId) {
         loadNote();
+    }
+    else {
+        document.getElementById("title").value = "";
+        document.getElementById("content").value = "";
     }
 });
