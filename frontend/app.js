@@ -10,7 +10,10 @@ async function loadNotes() {
     notes.forEach(note => {
         const card = document.createElement("div");
         card.className = "note-card";
-        card.textContent = note.title || "Untitled Note";
+
+        card.innerHTML = `
+            <h3>${note.title || "Untitled Note"}</h3>
+        `;
 
         card.onclick = () => {
             window.location.href = `note.html?id=${note.id}`;

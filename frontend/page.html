@@ -6,21 +6,25 @@
     <title>Notes</title>
     <style>
         body {
-            max-width: 700px;
-            margin: auto;
-            padding: 20px;
+            margin: 0;
+            padding: 0;
         }
         input, textarea {
+            margin: auto;
             width: 100%;
             margin-bottom: 6px;
         }
         button {
             margin-right: 6px;
         }
-        .note {
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin-bottom: 10px;
+        .title {
+            text-align: center;
+        }
+        .btn-container {
+            text-align: center;
+        }
+        .notes-title {
+            text-align: center;
         }
         .note h3 {
             margin: 0 0 10px 0;
@@ -28,28 +32,35 @@
         .note p {
             margin: 0;
         }
+        #notes {
+            display: grid;
+            grid-template-columns: repeat(4, 200px);
+            gap: 30px;
+            justify-content: center;
+            padding: 40px 20px;
+        }
         .note-card {
-            border: 1px solid #000000;
-            padding: 14px;
-            margin-bottom: 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            background: #fafafa;
-            transition: background 0.2s ease;
-        }
-        .note-card:hover {
-            background: #f0f0f0;
-        }
-
+            border: 2px solid #000;
+            padding: 20px;
+            min-height: 170px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background: white;
+            text-align: center;
+        } 
     </style>
 
 </head>
 <body>
-    <h1>Notes</h1>
+    <h1 class="title">Notes</h1>
 
-    <button onclick="window.location.href='note.html'">Create New Note</button>
+    <div class="btn-container">
+        <button onclick="window.location.href='note.html'">Create New Note</button>
+    </div>
+    
+    <h2 class="notes-title">All Notes</h2>
 
-    <h2>All Notes</h2>
     <div id="notes"></div>
 
     <script src="/static/app.js"></script>

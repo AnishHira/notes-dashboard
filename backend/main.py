@@ -8,7 +8,18 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
-app.mount("/static", StaticFiles(directory="frontend"), name="static")
+class NoCacheStaticFiles(StaticFiles):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+    
+    async def get_response(self, path: str, scope):
+        response = await super().get_response(path, scope)
+        response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+        response.headers["Pragma"] = "no-cache"
+        response.headers["Expires"] = "0"
+        return response
+
+app.mount("/static", NoCacheStaticFiles(directory="frontend"), name="static")
 
 app.add_middleware(
     CORSMiddleware,
@@ -24,11 +35,15 @@ class Note(BaseModel):
 
 @app.get("/")
 def home():
-    return FileResponse("frontend/page.html")
+    response = FileResponse("frontend/page.html")
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    return response
 
 @app.get("/note.html")
 def note_page():
-    return FileResponse("frontend/note.html")
+    response = FileResponse("frontend/note.html")
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    return response
 
 @app.post("/notes")
 def create_note(note: Note):
