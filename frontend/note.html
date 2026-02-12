@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Note</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
-
+            font-family: 'Inter', 'Arial', sans-serif;
+            background-color:#312F2C;
             background-image: url('/static/images/background.avif');
             background-size: cover;
             background-position: center;
@@ -23,8 +24,10 @@
             justify-content: space-between;
             align-items: center;
             padding: 15px 30px;
-            background-color: #f8f8f8;
-            border-bottom: 1px solid #ddd;
+            background-color:#312F2C;
+            
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
         }
 
         .navbar-left {
@@ -39,13 +42,21 @@
         button {
             padding: 8px 16px;
             cursor: pointer;
-            border: 1px solid #333;
-            background-color: white;
-            border-radius: 4px;
+
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+
+            background: rgba(255, 255, 255, 0.126);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 8px;
+            border: 1px solid rgba(42, 42, 42, 0.2);
+
+            color: #B3AC98;
         }
 
         button:hover {
-            background-color: #f0f0f0;
+            background-color: #3f3f3f;
         }
 
         .content {
@@ -60,17 +71,27 @@
             width: 70%;
             padding: 12px;
             font-size: 18px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            color: #B3AC98;
+            background-color: #312F2C;
+            border:#312F2C;
+            border-radius: 8px;
+            font-family: 'Inter', 'Arial', sans-serif;
+            font-weight: bold;
         }
 
         #content {
             width: 70%;
             padding: 12px;
             font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            resize: vertical;
+            color:#B3AC98;
+            background-color: #312F2C;
+            border:#312F2C;
+            border-radius: 8px;
+            overflow: hidden;
+            resize: none;
+            font-family: 'Inter', 'Arial', sans-serif;
+            min-height: 200px;
+            box-sizing: border-box;
         }
     </style>
 </head>

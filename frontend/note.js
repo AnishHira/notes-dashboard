@@ -3,6 +3,11 @@ const API = "http://127.0.0.1:8000";
 const params = new URLSearchParams(window.location.search);
 const noteId = params.get("id");
 
+function autoResizeTextarea(textarea) {
+    textarea.style.height = 'auto';
+    textarea.style.height = textarea.scrollHeight + 'px';
+}
+
 async function loadNote() {
     const res = await fetch(`${API}/notes/${noteId}`);
 
@@ -16,6 +21,8 @@ async function loadNote() {
 
     document.getElementById("title").value = note.title || "Untitled Note";
     document.getElementById("content").value = note.content || "";
+
+    autoResizeTextarea(document.getElementById("content"));
 }
 
 async function updateNote() {
@@ -50,6 +57,12 @@ async function deleteNote() {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
+    const contentArea = document.getElementById("content");
+    
+    contentArea.addEventListener('input', function() {
+        autoResizeTextarea(this);
+    });
+
     if (noteId) {
         loadNote();
     }
