@@ -12,3 +12,20 @@ DB_PATH = os.path.join(BASE_DIR, "notes.db")
 #FastAPI can also handle multiple requests using the same database
 def get_connection():
     return sqlite3.connect(DB_PATH, check_same_thread=False)
+
+def init_db():
+    conn = get_connection()
+    cursor = conn.cursor()
+    
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS notes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL,
+            content TEXT NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+    
+    conn.commit()
+    conn.close()
+    print("Database initialised")

@@ -2,11 +2,17 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
-from .db import get_connection
+from .db import get_connection, init_db
 import sqlite3
 from pydantic import BaseModel
+from contextlib import asynccontextmanager
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    init_db()
+    yield
+
+app = FastAPI(lifespan=lifespan)
 
 class NoCacheStaticFiles(StaticFiles):
     def __init__(self, *args, **kwargs):
