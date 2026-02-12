@@ -44,7 +44,7 @@
             justify-content: center;
             align-items: center;
 
-            background: rgba(73, 73, 73, 0.2);
+            background: rgba(139, 139, 139, 0.2);
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
 
@@ -109,6 +109,8 @@
             background: rgba(142, 142, 142, 0.2);
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
+
+            transition: all 0.3s ease;
         } 
         .note-card h3 {
             position: relative; 
@@ -127,14 +129,48 @@
             top: 14%;             
             left: 50%;             
             transform: translate(-50%, -50%); 
-            width: 90%;          
+            width: 93%;          
             height: 50px;    
             background: #312F2C;
             border-radius: 8px;
-            z-index: 2;     
+            z-index: 2;  
+            transition: all 0.3s ease;   
+        }
+        .note-card:hover {
+            background: rgba(91, 91, 91, 0.2);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
         }
         .note-card .text-bg:hover {
             background: #3b3b3b;
+        }
+        .skeleton {
+            position: absolute;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            gap: 10px;
+            width: 90%;
+            z-index: 3;
+        }
+        .skeleton .line {
+            height: 20px; 
+            width: 100%;
+            background: rgba(142, 142, 142, 0.2);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            
+            border: 1px solid rgba(93, 93, 93, 0.4);
+            border-radius: 16px; 
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
+        }
+        .skeleton .line.short {
+            width: 50%;
         }
 
     </style>
@@ -144,13 +180,12 @@
     
     <div class="title-wrapper">
         <div class="title">
-        <h1>Personal Notes Directory</h1>
-    </div>
+            <h1>Personal Notes Directory</h1>
+        </div>
     
-    <div class="btn-container">
-        <button onclick="window.location.href='note.html'">Create New Note</button>
-    </div>
-
+        <div class="btn-container">
+            <button onclick="window.location.href='note.html'">Create New Note</button>
+        </div>
     </div>
 
     <div id="notes"></div>

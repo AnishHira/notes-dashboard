@@ -14,11 +14,21 @@ async function loadNotes() {
         const textBg = document.createElement("div");
         textBg.className = "text-bg";
 
+        
         card.innerHTML = `
             <h3>${note.title || "Untitled Note"}</h3>
         `;
 
+        const skeleton = document.createElement("div");
+        skeleton.className = "skeleton";
+        skeleton.innerHTML = `
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line short"></div>
+        `;
+
         card.appendChild(textBg);
+        card.appendChild(skeleton)
 
         card.onclick = () => {
             window.location.href = `note.html?id=${note.id}`;
