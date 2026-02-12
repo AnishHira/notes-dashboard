@@ -1,7 +1,10 @@
 const API = "http://127.0.0.1:8000";
 
 const params = new URLSearchParams(window.location.search);
-const noteId = params.get("id");
+let noteId = params.get("id");
+
+let autosaveTimer = null;
+let isLoaded = false;
 
 function autoResizeTextarea(textarea) {
     textarea.style.height = 'auto';
@@ -23,6 +26,8 @@ async function loadNote() {
     document.getElementById("content").value = note.content || "";
 
     autoResizeTextarea(document.getElementById("content"));
+    
+    isLoaded = true;
 }
 
 async function updateNote() {
@@ -35,6 +40,7 @@ async function updateNote() {
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({title, content})
         });
+        showStatus("Saved ✓", "saved");
     } else {
         const res = await fetch(`${API}/notes`, {
             method: "POST",
@@ -43,7 +49,10 @@ async function updateNote() {
         });
 
         const data = await res.json();
-        window.location.href = `note.html?id=${data.id}`;
+        
+        noteId = data.id;
+        window.history.replaceState(null, '', `note.html?id=${data.id}`);
+        showStatus("Saved ✓", "saved");
         return;
     }
 }
@@ -58,17 +67,42 @@ async function deleteNote() {
 
 window.addEventListener("DOMContentLoaded", () => {
     const contentArea = document.getElementById("content");
+    const titleArea = document.getElementById("title");
     
     contentArea.addEventListener('input', function() {
         autoResizeTextarea(this);
+
+        if (isLoaded) { 
+            autosave();
+        }
+    });
+
+    titleArea.addEventListener('input', function() {
     });
 
     if (noteId) {
         loadNote();
-    }
-    else {
+    } else {
         document.getElementById("title").value = "";
         document.getElementById("content").value = "";
+        isLoaded = true;
     }
 });
 
+function showStatus(message, type) {
+    const status = document.getElementById("autosave-status");
+    status.textContent = message;
+    status.className = `show ${type}`;
+}
+
+function autosave() {
+    if (autosaveTimer) {
+        clearTimeout(autosaveTimer);
+    }
+
+    showStatus("Saving...", "saving");
+
+    autosaveTimer = setTimeout(() => {
+        updateNote();
+    }, 1000);
+}

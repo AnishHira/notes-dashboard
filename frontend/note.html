@@ -28,17 +28,28 @@
             
             border-bottom-left-radius: 8px;
             border-bottom-right-radius: 8px;
+            position: relative;
         }
 
         .navbar-left {
             display: flex;
+            flex: 1;
+        }
+
+        .navbar-center {
+            position: absolute;
+            left: 50%; 
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
         }
 
         .navbar-right {
             display: flex;
             gap: 10px;
+            flex: 1;
+            justify-content: flex-end;
         }
-
         button {
             padding: 8px 16px;
             cursor: pointer;
@@ -68,7 +79,7 @@
         }
 
         #title {
-            width: 70%;
+            width: 68.5%;
             padding: 12px;
             font-size: 18px;
             color: #B3AC98;
@@ -93,6 +104,25 @@
             min-height: 200px;
             box-sizing: border-box;
         }
+        #autosave-status {
+            font-size: 14px;
+            color: #B3AC98;
+            font-weight: 700;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #autosave-status.show {
+            opacity: 1;
+        }
+
+        #autosave-status.saving {
+            color: #d4c5a9;
+        }
+
+        #autosave-status.saved {
+            color: #8bc34a;
+        }
     </style>
 </head>
 
@@ -104,6 +134,9 @@
         <div class="navbar-right">
             <button onclick="updateNote()">Save</button>
             <button onclick="deleteNote()">Delete</button>
+        </div>
+        <div class="navbar-center">
+            <span id="autosave-status"></span>
         </div>
     </div>
 
