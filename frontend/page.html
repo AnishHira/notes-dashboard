@@ -3,32 +3,85 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Notes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <title>Notes Directory</title>
+    
     <style>
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            font-family: 'Inter', 'Arial Narrow', Arial, sans-serif;
+            justify-content: center;
+
+            background-image: url('/static/images/background.avif');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed; 
+
+            height: 100vh;
         }
         input, textarea {
             margin: auto;
             width: 100%;
             margin-bottom: 6px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
         }
         button {
             margin-right: 6px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+        }
+        .title-wrapper {
+            position: relative;
+            width: 90%;
+            margin: 40px auto;
         }
         .title {
-            text-align: center;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            background: rgba(73, 73, 73, 0.2);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+
+            border-radius: 12px;
+            border: 1px solid rgba(129, 129, 129, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            font-weight: 700;
+            font-size:x-large;
+            color: #312F2C;
         }
         .btn-container {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
             text-align: center;
+        }
+        .btn-container button {
+            padding: 18px 80px;
+            color: #B3AC98;
+            font-size: 20px;
+            border-radius: 8px;
+            border: none;
+            background: #312F2C;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        .btn-container button:hover {
+            background: #3b3b3b;
         }
         .notes-title {
             text-align: center;
         }
         .note h3 {
-            margin: 0 0 10px 0;
+            margin: 0 0 20px 0;
         }
         .note p {
             margin: 0;
@@ -39,10 +92,12 @@
             gap: 30px;
             justify-content: center;
             padding: 40px 20px;
+            color: #B3AC98; 
         }
         .note-card {
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            position: relative;
+            border:  1px solid rgba(129, 129, 129, 0.3);
+            border-radius: 8px;
             padding: 20px;
             min-height: 170px;
             display: flex;
@@ -50,18 +105,53 @@
             justify-content: space-between;
             background: white;
             text-align: center;
+
+            background: rgba(142, 142, 142, 0.2);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
         } 
+        .note-card h3 {
+            position: relative; 
+            z-index: 3; 
+            margin: 0 0 10px 0;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+
+            font-size: 15px;
+        }
+        .note-card .text-bg {
+            position: absolute;   
+            top: 14%;             
+            left: 50%;             
+            transform: translate(-50%, -50%); 
+            width: 90%;          
+            height: 50px;    
+            background: #312F2C;
+            border-radius: 8px;
+            z-index: 2;     
+        }
+        .note-card .text-bg:hover {
+            background: #3b3b3b;
+        }
+
     </style>
 
 </head>
 <body>
-    <h1 class="title">Notes</h1>
-
+    
+    <div class="title-wrapper">
+        <div class="title">
+        <h1>Personal Notes Directory</h1>
+    </div>
+    
     <div class="btn-container">
         <button onclick="window.location.href='note.html'">Create New Note</button>
     </div>
-    
-    <h2 class="notes-title">All Notes</h2>
+
+    </div>
 
     <div id="notes"></div>
 
