@@ -5,6 +5,34 @@ let noteId = params.get("id");
 
 let autosaveTimer = null;
 let isLoaded = false;
+let currentTags = [];
+
+function renderTags() {
+    const display = document.getElementById("tags-display");
+    display.innerHTML = currentTags.map(tag => 
+        `<span>${tag} <button onclick="removeTag('${tag}')">x</button></span>`).join(' ');
+}
+
+function addTag() {
+    const input = document.getElementById("tag-input");
+    const tag = input.value.trim().toLowerCase();
+    if (tag && !currentTags.includes(tag)) {
+        currentTags.push(tag);
+        renderTags();
+        input.value = "";
+        if (isLoaded) {
+            autosave();
+        }
+    }
+}
+
+function removeTag(tag) {
+    currentTags = currentTags.filter(t => t !== tag);
+    renderTags();
+    if (isLoaded) {
+        autosave();
+    }
+}
 
 function autoResizeTextarea(textarea) {
     textarea.style.height = 'auto';
@@ -24,6 +52,9 @@ async function loadNote() {
 
     document.getElementById("title").value = note.title || "Untitled Note";
     document.getElementById("content").value = note.content || "";
+    currentTags = note.tags || [];
+    
+    renderTags();
 
     autoResizeTextarea(document.getElementById("content"));
     
@@ -38,14 +69,14 @@ async function updateNote() {
         await fetch(`${API}/notes/${noteId}`, { 
             method: "PUT",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({title, content})
+            body: JSON.stringify({title, content, tags: currentTags})
         });
         showStatus("Saved ✓", "saved");
     } else {
         const res = await fetch(`${API}/notes`, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({title, content})
+            body: JSON.stringify({title, content, tags: currentTags})
         });
 
         const data = await res.json();
@@ -80,11 +111,21 @@ window.addEventListener("DOMContentLoaded", () => {
     titleArea.addEventListener('input', function() {
     });
 
+    document.getElementById("tag-input").addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            addTag();
+        }
+    });
+
     if (noteId) {
         loadNote();
     } else {
         document.getElementById("title").value = "";
         document.getElementById("content").value = "";
+        currentTags = [];
+        renderTags();
+        
         isLoaded = true;
     }
 });

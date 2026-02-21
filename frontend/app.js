@@ -1,8 +1,12 @@
 const API = "http://127.0.0.1:8000"
 
-async function loadNotes() {
-    const response = await fetch(`${API}/notes`);
-    const notes = await response.json();
+let allNotes = [];
+let selectedTag = 'all';
+
+async function renderNotes() {
+    const notes = selectedTag === 'all'
+    ? allNotes
+    : allNotes.filter(note => note.tags && note.tags.includes(selectedTag));
 
     const container = document.getElementById("notes");
     container.innerHTML = "";
@@ -30,12 +34,40 @@ async function loadNotes() {
         card.appendChild(textBg);
         card.appendChild(skeleton)
 
+        if (note.tags) {
+            const tags = document.createElement("div");
+            tags.innerHTML = note.tags.map(t => `<span>${t}</span>`).join(' ');
+            card.appendChild(tags);
+        }
+
         card.onclick = () => {
             window.location.href = `note.html?id=${note.id}`;
         }
 
         container.appendChild(card);
     });
+}
+
+function renderTagFilters() {
+    const allTags = new Set();
+    allNotes.forEach(note => {
+        if (note.tags) note.tags.forEach(tag => allTags.add(tag));
+    });
+    
+    const filterContainer = document.getElementById("tag-filters");
+    filterContainer.innerHTML = '';
+    
+    allTags.forEach(tag => {
+        const btn = document.createElement("button");
+        btn.textContent = tag;
+        btn.onclick = () => filterByTag(tag);
+        filterContainer.appendChild(btn);
+    });
+}
+
+function filterByTag(tag) {
+    selectedTag = tag;
+    renderNotes();
 }
 
 async function createNote() {
@@ -51,7 +83,14 @@ async function createNote() {
     document.getElementById("newTitle").value = "";
     document.getElementById("newContent").value = "";
 
-    loadNotes();
+    renderNotes();
+}
+
+async function loadNotes() {
+    const response = await fetch(`${API}/notes`);
+    allNotes = await response.json();
+    renderTagFilters();
+    renderNotes();
 }
 
 loadNotes();

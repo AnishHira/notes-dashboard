@@ -6,6 +6,7 @@ from .db import get_connection, init_db
 import sqlite3
 from pydantic import BaseModel
 from contextlib import asynccontextmanager
+import json
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -38,6 +39,7 @@ app.add_middleware(
 class Note(BaseModel):
     title: str
     content: str
+    tags: list[str] = []
 
 @app.get("/")
 def home():
@@ -60,7 +62,7 @@ def create_note(note: Note):
     conn = get_connection()
     cursor = conn.cursor()
 
-    cursor.execute("INSERT INTO notes (title, content) VALUES (?, ?)", (note.title, note.content))
+    cursor.execute("INSERT INTO notes (title, content, tags) VALUES (?, ?, ?)", (note.title, note.content, json.dumps(note.tags)))
 
     note_id = cursor.lastrowid
     conn.commit()
@@ -73,7 +75,7 @@ def update_notes(note_id: int, note: Note):
     conn = get_connection()
     cursor = conn.cursor()
 
-    cursor.execute("UPDATE NOTES SET title = ?, content = ? WHERE id = ?", (note.title, note.content, note_id))
+    cursor.execute("UPDATE NOTES SET title = ?, content = ?, tags = ? WHERE id = ?", (note.title, note.content, json.dumps(note.tags), note_id))
 
     conn.commit()
     conn.close()
@@ -82,6 +84,7 @@ def update_notes(note_id: int, note: Note):
         "id": note_id,
         "title": note.title,
         "content": note.content,
+        "tags": note.tags,
     }
 
 @app.get("/notes")
@@ -89,7 +92,7 @@ def get_notes():
     conn = get_connection()
     cursor = conn.cursor()
 
-    cursor.execute("SELECT id, title, content, created_at FROM notes")
+    cursor.execute("SELECT id, title, content, tags, created_at FROM notes")
 
     rows = cursor.fetchall()
 
@@ -100,7 +103,8 @@ def get_notes():
             "id": row[0],
             "title": row[1],
             "content": row[2],
-            "created_at": row[3]
+            "tags": json.loads(row[3] or '[]'),
+            "created_at": row[4]
         }
         for row in rows
     ]
@@ -121,7 +125,7 @@ def get_note(note_id: int):
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute(
-        "SELECT id, title, content FROM notes WHERE id = ?",
+        "SELECT id, title, content, tags FROM notes WHERE id = ?",
         (note_id,)
     )
     row = cursor.fetchone()
@@ -133,5 +137,6 @@ def get_note(note_id: int):
     return {
         "id": row[0],
         "title": row[1],
-        "content": row[2]
+        "content": row[2],
+        "tags": json.loads(row[3] or '[]')
     }
