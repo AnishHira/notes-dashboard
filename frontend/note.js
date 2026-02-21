@@ -6,16 +6,50 @@ let noteId = params.get("id");
 let autosaveTimer = null;
 let isLoaded = false;
 let currentTags = [];
+let allExistingTags = [];
+
+async function loadExistingTags() {
+    const response = await fetch(`${API}/notes`);
+    const notes = await response.json();
+    
+    const tagSet = new Set();
+    notes.forEach(note => {
+        if (note.tags) {
+            note.tags.forEach(tag => tagSet.add(tag));
+        }
+    });
+    
+    allExistingTags = Array.from(tagSet);
+}
+
+function addExistingTag(tag) {
+    currentTags.push(tag);
+    renderTags();
+    if (isLoaded) {
+         autosave();
+    }
+}
 
 function renderTags() {
     const display = document.getElementById("tags-display");
-    display.innerHTML = currentTags.map(tag => 
-        `<span>${tag} <button onclick="removeTag('${tag}')">x</button></span>`).join(' ');
+
+    const currentTagsHtml = currentTags.map(tag => 
+        `<span>${tag} <button onclick="removeTag('${tag}')">x</button></span>`
+    ).join(' ');
+    
+    const availableTags = allExistingTags.filter(tag => !currentTags.includes(tag));
+    const suggestionsHtml = availableTags.length > 0
+        ? "<div>Existing tags: " + availableTags.map(tag => 
+            `<button onclick="addExistingTag('${tag}')">${tag}</button>`
+          ).join(' ') + "</div>"
+        : "";
+    
+    display.innerHTML = currentTagsHtml + suggestionsHtml;
 }
 
 function addTag() {
     const input = document.getElementById("tag-input");
-    const tag = input.value.trim().toLowerCase();
+    const tag = input.value.trim();
     if (tag && !currentTags.includes(tag)) {
         currentTags.push(tag);
         renderTags();
@@ -97,6 +131,8 @@ async function deleteNote() {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
+    loadExistingTags();
+
     const contentArea = document.getElementById("content");
     const titleArea = document.getElementById("title");
     
