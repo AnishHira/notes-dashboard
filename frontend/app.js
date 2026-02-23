@@ -2,11 +2,20 @@ const API = "http://127.0.0.1:8000"
 
 let allNotes = [];
 let selectedTag = 'all';
+let searchNote = '';
 
 async function renderNotes() {
-    const notes = selectedTag === 'all'
+    let notes = selectedTag === 'all'
     ? allNotes
     : allNotes.filter(note => note.tags && note.tags.includes(selectedTag));
+
+    if (searchNote) {
+        notes = notes.filter(note => {
+            const titleMatch = note.title.toLowerCase().includes(searchNote.toLowerCase());
+            const contentMatch = note.content.toLowerCase().includes(searchNote.toLowerCase());
+            return titleMatch || contentMatch;
+        });
+    }
 
     const container = document.getElementById("notes");
     container.innerHTML = "";
@@ -91,6 +100,11 @@ async function loadNotes() {
     allNotes = await response.json();
     renderTagFilters();
     renderNotes();
+
+    document.getElementById("search-input").addEventListener('input', function(e) {
+        searchNote = e.target.value;
+        renderNotes();
+    });
 }
 
 loadNotes();

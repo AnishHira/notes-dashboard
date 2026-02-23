@@ -32,12 +32,18 @@ function addExistingTag(tag) {
 
 function renderTags() {
     const display = document.getElementById("tags-display");
+    const input = document.getElementById("tag-input");
+    const filterTerm = input.value.toLowerCase();
 
     const currentTagsHtml = currentTags.map(tag => 
         `<span>${tag} <button onclick="removeTag('${tag}')">x</button></span>`
     ).join(' ');
     
-    const availableTags = allExistingTags.filter(tag => !currentTags.includes(tag));
+    const availableTags = allExistingTags.filter(tag => 
+        !currentTags.includes(tag) && 
+        (filterTerm === '' || tag.toLowerCase().includes(filterTerm))
+    );
+    
     const suggestionsHtml = availableTags.length > 0
         ? "<div>Existing tags: " + availableTags.map(tag => 
             `<button onclick="addExistingTag('${tag}')">${tag}</button>`
@@ -152,6 +158,10 @@ window.addEventListener("DOMContentLoaded", () => {
             e.preventDefault();
             addTag();
         }
+    });
+
+    document.getElementById("tag-input").addEventListener('input', function() {
+        renderTags();
     });
 
     if (noteId) {
