@@ -1,7 +1,0 @@
-CREATE TABLE "notes" (
-	"id"	INTEGER,
-	"title"	TEXT NOT NULL,
-	"content"	TEXT NOT NULL,
-	"created_at"	TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	PRIMARY KEY("id")
-);
