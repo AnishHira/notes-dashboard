@@ -36,7 +36,6 @@ function renderTags() {
     const filterTerm = input.value.toLowerCase();
 
     display.innerHTML = "";
-
     currentTags.forEach(tag => {
         const span = document.createElement("span");
         span.textContent = tag + " ";
@@ -49,24 +48,35 @@ function renderTags() {
         display.appendChild(span);
     });
 
+    let suggestionDiv = document.getElementById("existing-tags-container");
+    if (!suggestionDiv) {
+        suggestionDiv = document.createElement("div");
+        suggestionDiv.id = "existing-tags-container";
+        display.parentNode.appendChild(suggestionDiv);
+    }
+    suggestionDiv.innerHTML = "";
+
     const availableTags = allExistingTags.filter(tag => 
         !currentTags.includes(tag) &&
         (filterTerm === '' || tag.toLowerCase().includes(filterTerm))
     );
 
     if (availableTags.length > 0) {
-        const suggestionDiv = document.createElement("div");
-        suggestionDiv.textContent = "Existing tags: ";
+        const label = document.createElement("span");
+        label.textContent = "Existing tags: ";
+        label.className = "existing-tags-label";
+        suggestionDiv.appendChild(label);
 
         availableTags.forEach(tag => {
             const btn = document.createElement("button");
             btn.textContent = tag;
-            btn.addEventListener("click", () => addExistingTag(tag));
+            btn.className = "existing-tag-btn";
+            btn.addEventListener("click", () => {
+                addExistingTag(tag);
+                renderTags();
+            });
             suggestionDiv.appendChild(btn);
-            suggestionDiv.appendChild(document.createTextNode(" ")); // spacing
         });
-
-        display.appendChild(suggestionDiv);
     }
 }
 
