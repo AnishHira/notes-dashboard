@@ -45,6 +45,7 @@ async function renderNotes() {
 
         if (note.tags) {
             const tags = document.createElement("div");
+            tags.className = "note-tags";
             tags.innerHTML = note.tags.map(t => `<span>${t}</span>`).join(' ');
             card.appendChild(tags);
         }

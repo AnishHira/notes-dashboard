@@ -67,7 +67,7 @@
         }
 
         button:hover {
-            background-color: #3f3f3f;
+            background-color: #3b3b3b;
         }
 
         .content {
@@ -111,17 +111,140 @@
             opacity: 0;
             transition: opacity 0.3s ease;
         }
-
         #autosave-status.show {
             opacity: 1;
         }
-
         #autosave-status.saving {
             color: #d4c5a9;
         }
-
         #autosave-status.saved {
             color: #8bc34a;
+        }
+        * {
+            box-sizing: border-box;
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            gap: 20px;
+        }
+
+        #title {
+            width: 68.5%;
+            padding: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            color: #B3AC98;
+            background-color: #312F2C;
+            border: 1px solid #312F2C;
+            border-radius: 8px;
+            font-family: 'Inter', 'Arial', sans-serif;
+        }
+
+        #content {
+            width: 70%;
+            padding: 12px;
+            font-size: 16px;
+            color: #B3AC98;
+            background-color: #312F2C;
+            border:1px solid #312F2C;
+            border-radius: 8px;
+            overflow: hidden;
+            resize: none;
+            min-height: 200px;
+        }
+
+        #title:focus, #content:focus {
+            outline: none;
+            border-color: #B3AC98;
+            box-shadow: 0 0 50px rgba(179, 172, 152, 0.3);
+        }
+
+        .tag-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: fit-content;
+        }
+
+        #tag-input {
+            width: 30vw; 
+            padding: 10px 12px;
+            font-weight: 700;
+            font-size: 14px;
+            border-radius: 8px;
+            border: 1px solid rgba(179, 172, 152, 0.4);
+            background: #312F2C;
+            color: #B3AC98;
+            outline: none;
+        }
+
+        #tag-input::placeholder {
+            color: rgba(179, 172, 152, 0.6);
+        }
+
+        #tag-input:focus {
+            border-color: #B3AC98;
+            box-shadow: 0 0 50px rgba(179, 172, 152, 0.3);
+        }
+
+        .add-tag-btn {
+            padding: 10px 16px;
+            font-weight: 700;
+            font-size: 14px;
+            border-radius: 8px;
+            border: 1px solid rgba(42, 42, 42, 0.2);
+            background:#312F2C;
+            color: #B3AC98;
+            cursor: pointer;
+        }
+
+        .add-tag-btn:hover {
+            background-color:#3b3b3b;
+        }
+
+        #tags-display span {
+            display: inline-flex;
+            align-items: center;
+            background: #312F2C;
+            color: #B3AC98;
+            font-weight: 700;
+            font-size: 13px;
+            padding: 5px 15px;
+            border-radius: 12px;
+            margin: 2px 2px 0 0;
+        }
+
+        #tags-display span button {
+            margin-left: 6px;
+            background: none;
+            border: none;
+            color: #B3AC98;
+            font-size: 11px;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+        }
+
+        #tags-display span button:hover {
+            color: #d4d4d4;
+        }
+
+       .tag-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        #tags-display {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 8px;
         }
     </style>
 </head>
@@ -142,11 +265,12 @@
 
     <div class="content">
         <input id="title" placeholder="Enter title">
-        <div>
-            Tags: <input id="tag-input" placeholder="Add tag">
-            <button onclick="addTag()">Add Tag</button>
+        <div class="tag-wrapper">
+            <span class="tag-container">
+                <input id="tag-input" placeholder="Add tag">
+                <button class="add-tag-btn" onclick="addTag()">Add Tag</button>
+            </span>
             <div id="tags-display"></div>
-
         </div>
         <textarea id="content" rows="20" placeholder="Content"></textarea>
     </div>
