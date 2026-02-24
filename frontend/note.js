@@ -35,22 +35,39 @@ function renderTags() {
     const input = document.getElementById("tag-input");
     const filterTerm = input.value.toLowerCase();
 
-    const currentTagsHtml = currentTags.map(tag => 
-        `<span>${tag} <button onclick="removeTag('${tag}')">x</button></span>`
-    ).join(' ');
-    
+    display.innerHTML = "";
+
+    currentTags.forEach(tag => {
+        const span = document.createElement("span");
+        span.textContent = tag + " ";
+
+        const btn = document.createElement("button");
+        btn.textContent = "x";
+        btn.addEventListener("click", () => removeTag(tag));
+
+        span.appendChild(btn);
+        display.appendChild(span);
+    });
+
     const availableTags = allExistingTags.filter(tag => 
-        !currentTags.includes(tag) && 
+        !currentTags.includes(tag) &&
         (filterTerm === '' || tag.toLowerCase().includes(filterTerm))
     );
-    
-    const suggestionsHtml = availableTags.length > 0
-        ? "<div>Existing tags: " + availableTags.map(tag => 
-            `<button onclick="addExistingTag('${tag}')">${tag}</button>`
-          ).join(' ') + "</div>"
-        : "";
-    
-    display.innerHTML = currentTagsHtml + suggestionsHtml;
+
+    if (availableTags.length > 0) {
+        const suggestionDiv = document.createElement("div");
+        suggestionDiv.textContent = "Existing tags: ";
+
+        availableTags.forEach(tag => {
+            const btn = document.createElement("button");
+            btn.textContent = tag;
+            btn.addEventListener("click", () => addExistingTag(tag));
+            suggestionDiv.appendChild(btn);
+            suggestionDiv.appendChild(document.createTextNode(" ")); // spacing
+        });
+
+        display.appendChild(suggestionDiv);
+    }
 }
 
 function addTag() {
