@@ -163,8 +163,8 @@ async function deleteNote() {
     window.location.href = "/";
 }
 
-window.addEventListener("DOMContentLoaded", () => {
-    loadExistingTags();
+window.addEventListener("DOMContentLoaded", async () => {
+    await loadExistingTags();
 
     const contentArea = document.getElementById("content");
     const titleArea = document.getElementById("title");
